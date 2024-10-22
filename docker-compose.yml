@@ -11,3 +11,9 @@ services:
             - server/.env
         depends_on:
             - database
+    proxy:
+        build:
+            context: proxy
+            dockerfile: Dockerfile
+        ports:
+            - 127.0.0.1:${PUBLIC_PORT}:80
