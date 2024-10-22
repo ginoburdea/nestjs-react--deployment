@@ -11,6 +11,12 @@ services:
             - server/.env
         depends_on:
             - database
+    client:
+        build:
+            context: client
+            dockerfile: Dockerfile
+        volumes:
+            - client-build:/app/build
     proxy:
         build:
             context: proxy
