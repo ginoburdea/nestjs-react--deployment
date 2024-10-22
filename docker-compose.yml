@@ -1,0 +1,5 @@
+services:
+    database:
+        image: postgres:17-alpine
+        env_file:
+            - database/.env
