@@ -3,3 +3,11 @@ services:
         image: postgres:17-alpine
         env_file:
             - database/.env
+    server:
+        build:
+            context: server
+            dockerfile: Dockerfile
+        env_file:
+            - server/.env
+        depends_on:
+            - database
