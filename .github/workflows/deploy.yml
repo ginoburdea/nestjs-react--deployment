@@ -10,9 +10,7 @@ jobs:
     Deploy:
         runs-on: ubuntu-latest
         steps:
-            - name: Git Checkout
-              uses: actions/checkout@v2
-            - name: Restart Docker
+            - name: Clone/pull the repository and start/restart Docker
               uses: appleboy/ssh-action@v1.1.0
               with:
                   host: ${{ secrets.SSH_HOST }}
@@ -21,5 +19,6 @@ jobs:
                   key: ${{ secrets.SSH_PRIVATE_KEY }}
                   passphrase: ${{ secrets.SSH_PASSPHRASE }}
                   script: |
+                      if cd nestjs-react; then git pull; else git clone ${{ github.repositoryUrl }} nestjs-react; fi
                       docker compose down
                       docker compose up --build --detach
