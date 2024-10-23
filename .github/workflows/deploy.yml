@@ -1,0 +1,25 @@
+name: Deploy to production
+on:
+    repository_dispatch:
+        types:
+            - trigger_build
+    push:
+        branches:
+            - main
+jobs:
+    Deploy:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Git Checkout
+              uses: actions/checkout@v2
+            - name: Restart Docker
+              uses: appleboy/ssh-action@v1.1.0
+              with:
+                  host: ${{ secrets.SSH_HOST }}
+                  port: ${{ secrets.SSH_PORT }}
+                  username: ${{ secrets.SSH_USERNAME }}
+                  key: ${{ secrets.SSH_PRIVATE_KEY }}
+                  passphrase: ${{ secrets.SSH_PASSPHRASE }}
+                  script: |
+                      docker compose down
+                      docker compose up --build --detach
