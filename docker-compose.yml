@@ -27,6 +27,14 @@ services:
             - client-build:/app/client
         ports:
             - 127.0.0.1:${PUBLIC_PORT}:80
+    monitoring:
+        image: nicolargo/glances:latest
+        volumes:
+            - /var/run/docker.sock:/var/run/docker.sock
+        environment:
+            - 'GLANCES_OPT=-w'
+        ports:
+            - 127.0.0.1:61208:61208
 volumes:
     client-build:
     database-data:
