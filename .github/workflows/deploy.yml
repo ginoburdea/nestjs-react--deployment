@@ -18,4 +18,9 @@ jobs:
                   username: ${{ secrets.SSH_USERNAME }}
                   key: ${{ secrets.SSH_PRIVATE_KEY }}
                   passphrase: ${{ secrets.SSH_PASSPHRASE }}
-                  script: if cd nestjs-react; then git pull && docker compose down && docker compose up  --build --detach; else git clone https://${{ secrets.GITHUB_TOKEN }}}@github.com/${{ github.repository }}.git nestjs-react && cd nestjs-react && docker compose up --build --detach; fi
+                  script: |
+                    rm -rf nestjs-react
+                    git clone https://${{ secrets.GITHUB_TOKEN }}}@github.com/${{ github.repository }}.git nestjs-react
+                    cd nestjs-react
+                    sudo docker compose stop
+                    sudo docker compose up --build --detach
