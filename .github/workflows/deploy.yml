@@ -19,8 +19,31 @@ jobs:
                   key: ${{ secrets.SSH_PRIVATE_KEY }}
                   passphrase: ${{ secrets.SSH_PASSPHRASE }}
                   script: |
-                    rm -rf nestjs-react
-                    git clone https://${{ secrets.GITHUB_TOKEN }}}@github.com/${{ github.repository }}.git nestjs-react
-                    cd nestjs-react
-                    sudo docker compose stop
-                    sudo docker compose up --build --detach
+                      # Clone the repo
+                      rm -rf nestjs-react
+                      git clone https://${{ secrets.GITHUB_TOKEN }}}@github.com/${{ github.repository }}.git nestjs-react
+                      cd nestjs-react
+                      
+                      # Add the env variables
+                      echo "NEXT_PUBLIC_SERVER_URL=${{ secrets.CLIENT__NEXT_PUBLIC_SERVER_URL }}" >> client/.env
+
+                      echo "POSTGRES_PASSWORD=${{ secrets.DATABASE__POSTGRES_PASSWORD }}" >> database/.env
+
+                      echo "ADMIN_DATABASE_URL=${{ secrets.SERVER__ADMIN_DATABASE_URL }}" >> server/.env
+                      echo "DATABASE_URL=${{ secrets.SERVER__DATABASE_URL }}" >> server/.env
+                      echo "MASTER_PASSWORD=${{ secrets.SERVER__MASTER_PASSWORD }}" >> server/.env
+                      echo "JWT_SIGNING_KEY=${{ secrets.SERVER__JWT_SIGNING_KEY }}" >> server/.env
+                      echo "NODE_ENV=${{ secrets.SERVER__NODE_ENV }}" >> server/.env
+                      echo "S3_ACCESS_KEY_ID=${{ secrets.SERVER__S3_ACCESS_KEY_ID }}" >> server/.env
+                      echo "S3_SECRET_ACCESS_KEY=${{ secrets.SERVER__S3_SECRET_ACCESS_KEY }}" >> server/.env
+                      echo "S3_ENDPOINT=${{ secrets.SERVER__S3_ENDPOINT }}" >> server/.env
+                      echo "S3_BUCKET=${{ secrets.SERVER__S3_BUCKET }}" >> server/.env
+                      echo "S3_REGION=${{ secrets.SERVER__S3_REGION }}" >> server/.env
+                      echo "S3_PUBLIC_URL=${{ secrets.SERVER__S3_PUBLIC_URL }}" >> server/.env
+                      echo "CORS_ORIGINS=${{ secrets.SERVER__CORS_ORIGINS }}" >> server/.env
+
+                      echo "PUBLIC_PORT=${{ secrets.PUBLIC_PORT }}" >> .env
+
+                      # Restart Docker 
+                      sudo docker compose stop
+                      sudo docker compose up --build --detach
